@@ -18,7 +18,15 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         await client.connect();
-        console.log('DB Connected');
+        const volunteersCollection = client.db('thegivingtree').collection('volunteers');
+
+        //Getting all voluteers info
+        app.get('/volunteers', async (req, res) => {
+            const query = {};
+            const cursor = volunteersCollection.find(query);
+            const tools = await cursor.toArray();
+            res.send(tools);
+        })
     }
     finally {
 
