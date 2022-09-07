@@ -83,6 +83,18 @@ async function run() {
             const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24d' });
             res.send({ result, token });
         })
+        // Updating individual org data
+        app.put('/organization/:email', async (req, res) => {
+            const email = req.params.email;
+            const updateProfile = req.body;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: updateProfile,
+            };
+            const result = await organizationsCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        })
 
     }
     finally {
