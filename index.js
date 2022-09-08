@@ -44,6 +44,13 @@ async function run() {
             const tools = await cursor.toArray();
             res.send(tools);
         })
+        //Getting all voluteers info
+        app.get('/organizations', async (req, res) => {
+            const query = {};
+            const cursor = organizationsCollection.find(query);
+            const tools = await cursor.toArray();
+            res.send(tools);
+        })
         // Storing user data in database
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
