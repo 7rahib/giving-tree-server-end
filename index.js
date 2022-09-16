@@ -44,10 +44,9 @@ async function run() {
             const tools = await cursor.toArray();
             res.send(tools);
         })
-        //Getting all voluteers info
+        //Getting all organisation info
         app.get('/organizations', async (req, res) => {
-            const query = {};
-            const cursor = organizationsCollection.find(query);
+            const cursor = organizationsCollection.find();
             const tools = await cursor.toArray();
             res.send(tools);
         })
