@@ -36,6 +36,7 @@ async function run() {
         const volunteersCollection = client.db('thegivingtree').collection('volunteers');
         const userCollection = client.db('thegivingtree').collection('users');
         const organizationsCollection = client.db('thegivingtree').collection('organizations');
+        const emergencyReliefsCollection = client.db('thegivingtree').collection('emergencyReliefs');
 
         //Getting all voluteers info
         app.get('/volunteers', async (req, res) => {
@@ -113,6 +114,57 @@ async function run() {
             const result = await organizationsCollection.updateOne(filter, updatedDoc, options);
             res.send(result);
         })
+
+
+
+        // Running emergency reliefs
+
+
+        // All Running emergency relief information
+        app.get('/emergencyrelief', async (req, res) => {
+            const emergencyreliefs = await emergencyReliefsCollection.find().toArray();
+            res.send(emergencyreliefs);
+        })
+
+
+        // Adding new emergency relief
+        app.post("/emergencyrelief", async (req, res) => {
+            const query = req.body;
+            const emergencyrelief = await emergencyReliefsCollection.insertOne(query);
+            res.send(emergencyrelief);
+        });
+
+
+        // Getting individually added emergency reliefs by email
+        app.get('/emergencyrelief/:email', async (req, res) => {
+            const email = req.params.email
+            const query = { email: email };
+            const emergencyreliefs = await emergencyReliefsCollection.findOne(query)
+            res.send(emergencyreliefs)
+        });
+
+
+        // Getting all added emergency reliefs by location
+        app.get('/emergencyrelief/:location', async (req, res) => {
+            const location = req.params.location
+            const query = { location: location };
+            const emergencyreliefs = await emergencyReliefsCollection.findOne(query)
+            res.send(emergencyreliefs)
+        });
+
+
+        // Delete single emergency reliefs based on id
+        app.delete('/emergencyrelief/:_id', async (req, res) => {
+            const _id = req.params._id;
+            const filter = { _id: ObjectId(_id) };
+            const result = await emergencyReliefsCollection.deleteOne(filter);
+            res.send(result);
+        })
+
+
+        // Running emergency reliefs end
+
+
 
     }
     finally {
