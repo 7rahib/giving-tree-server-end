@@ -139,7 +139,7 @@ async function run() {
         app.get('/emergencyrelief/:email', async (req, res) => {
             const email = req.params.email
             const query = { email: email };
-            const emergencyreliefs = await emergencyReliefsCollection.findOne(query)
+            const emergencyreliefs = await emergencyReliefsCollection.find(query).toArray();
             res.send(emergencyreliefs)
         });
 
