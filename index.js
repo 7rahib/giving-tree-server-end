@@ -152,6 +152,14 @@ async function run() {
             res.send(emergencyreliefs)
         });
 
+        // Getting individual emergency relief data
+        app.get('/emergencyreliefs/:_id', async (req, res) => {
+            const _id = req.params._id
+            const query = { _id: ObjectId(_id) }
+            const emergencyreliefs = await emergencyReliefsCollection.findOne(query)
+            res.send(emergencyreliefs)
+        })
+
 
         // Delete single emergency reliefs based on id
         app.delete('/emergencyrelief/:_id', async (req, res) => {
