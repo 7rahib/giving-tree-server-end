@@ -202,6 +202,14 @@ async function run() {
             res.send({ admin: isAdmin })
         })
 
+        // Deleting Users
+        app.delete('/users/:_id', verifyJWT, async (req, res) => {
+            const _id = req.params._id;
+            const filter = { _id: ObjectId(_id) };
+            const result = await userCollection.deleteOne(filter);
+            res.send(result);
+        })
+
         // User Details Ends
 
 
