@@ -173,6 +173,37 @@ async function run() {
         // Running emergency reliefs end
 
 
+        // User Details
+
+
+        // All users information
+        app.get('/users', async (req, res) => {
+            const users = await userCollection.find().toArray();
+            res.send(users);
+        })
+
+        // Assign Admin role
+        app.put('/user/admin/:email', verifyJWT, async (req, res) => {
+            const email = req.params.email;
+            const filter = { email: email };
+            const updateDoc = {
+                $set: { role: 'admin' },
+            };
+            const result = await userCollection.updateOne(filter, updateDoc);
+            res.send(result);
+        })
+
+        // Checking which user has admin role
+        app.get('/user/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const user = await userCollection.findOne(query);
+            const isAdmin = user?.role === 'admin';
+            res.send({ admin: isAdmin })
+        })
+
+        // User Details Ends
+
 
     }
     finally {
