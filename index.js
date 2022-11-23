@@ -174,7 +174,7 @@ async function run() {
             const _id = req.params._id;
             const filter = { _id: ObjectId(_id) };
             const updateDoc = {
-                $set: { role: 'approved' },
+                $set: { status: 'approved' },
             };
             const result = await emergencyReliefsCollection.updateOne(filter, updateDoc);
             res.send(result);
@@ -192,6 +192,14 @@ async function run() {
             const users = await userCollection.find().toArray();
             res.send(users);
         })
+
+        // Getting individually of individual users by email
+        app.get('/users/:email', async (req, res) => {
+            const email = req.params.email
+            const query = { email: email };
+            const emergencyreliefs = await userCollection.find(query).toArray();
+            res.send(emergencyreliefs)
+        });
 
         // Assign Admin role
         app.put('/user/admin/:email', verifyJWT, async (req, res) => {
