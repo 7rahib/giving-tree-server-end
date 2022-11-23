@@ -169,6 +169,17 @@ async function run() {
             res.send(result);
         })
 
+        // Assigning approve status on a Relief
+        app.put('/emergencyrelief/:_id', verifyJWT, async (req, res) => {
+            const _id = req.params._id;
+            const filter = { _id: ObjectId(_id) };
+            const updateDoc = {
+                $set: { role: 'approved' },
+            };
+            const result = await emergencyReliefsCollection.updateOne(filter, updateDoc);
+            res.send(result);
+        })
+
 
         // Running emergency reliefs end
 
