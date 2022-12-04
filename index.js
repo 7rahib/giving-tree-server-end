@@ -38,6 +38,7 @@ async function run() {
         const userCollection = client.db('thegivingtree').collection('users');
         const organizationsCollection = client.db('thegivingtree').collection('organizations');
         const emergencyReliefsCollection = client.db('thegivingtree').collection('emergencyReliefs');
+        const donationsCollection = client.db('thegivingtree').collection('donations');
 
         //Getting all voluteers info
         app.get('/volunteers', async (req, res) => {
@@ -232,6 +233,28 @@ async function run() {
 
         // User Details Ends
 
+
+        // Donation
+        app.post('/donations', async (req, res) => {
+            const payment = req.body;
+            const result = await donationsCollection.insertOne(payment);
+            res.send(result);
+        })
+
+        // Getting all donations of an user
+        app.get('/donations/:email', async (req, res) => {
+            const email = req.params.email
+            const query = { donaterEmail: email }
+            const personalDonations = await donationsCollection.find(query).toArray();
+            res.send(personalDonations)
+        })
+        // Getting all donations
+        app.get('/donations', async (req, res) => {
+            const yourOrder = await donationsCollection.find().toArray()
+            res.send(yourOrder)
+        })
+
+        // Donation Ends
 
 
         // Payment Intent
