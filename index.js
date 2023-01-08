@@ -39,6 +39,8 @@ async function run() {
         const organizationsCollection = client.db('thegivingtree').collection('organizations');
         const emergencyReliefsCollection = client.db('thegivingtree').collection('emergencyReliefs');
         const donationsCollection = client.db('thegivingtree').collection('donations');
+        const upazillaCollection = client.db('thegivingtree').collection('upazillas');
+        const upazillaDonationCollection = client.db('thegivingtree').collection('upazillaDonations');
 
         //Getting all voluteers info
         app.get('/volunteers', async (req, res) => {
@@ -255,6 +257,63 @@ async function run() {
         })
 
         // Donation Ends
+
+        // Upazilla Data Testing
+
+        // Getting all upazilla data
+        app.get('/upazilla/:city', async (req, res) => {
+            const city = req.params.city
+            const query = { cityName: city }
+            const result = await upazillaCollection.find(query).toArray()
+            res.send(result)
+        })
+
+        // All Upazilla Donation data
+        app.get('/upazilla', async (req, res) => {
+            const result = await upazillaDonationCollection.find().toArray();
+            res.send(result);
+        })
+
+        // Marking Upazillas Donation status
+        app.put('/upazilla/:_id', verifyJWT, async (req, res) => {
+            const _id = req.params._id;
+            const filter = { _id: ObjectId(_id) };
+            const updateDoc = {
+                $set: { donation: 'Given' },
+            };
+            const result = await upazillaDonationCollection.updateOne(filter, updateDoc);
+            res.send(result);
+        })
+        app.put('/upazillas/:_id', verifyJWT, async (req, res) => {
+            const _id = req.params._id;
+            const filter = { _id: ObjectId(_id) };
+            const updateDoc = {
+                $set: { donation: 'Not Given' },
+            };
+            const result = await upazillaDonationCollection.updateOne(filter, updateDoc);
+            res.send(result);
+        })
+
+        // Add New Upazilla
+        app.post('/upazilla', async (req, res) => {
+            const upazilla = req.body;
+            const result = await upazillaDonationCollection.insertOne(upazilla);
+            res.send(result);
+        })
+
+        // Delete single upazilla based on id
+        app.delete('/upazillas/:_id', async (req, res) => {
+            const _id = req.params._id;
+            const filter = { _id: ObjectId(_id) };
+            const result = await upazillaDonationCollection.deleteOne(filter);
+            res.send(result);
+        })
+
+
+
+
+
+        // Upazilla Data Testing End
 
 
         // Payment Intent
