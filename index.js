@@ -41,6 +41,7 @@ async function run() {
         const donationsCollection = client.db('thegivingtree').collection('donations');
         const upazillaCollection = client.db('thegivingtree').collection('upazillas');
         const upazillaDonationCollection = client.db('thegivingtree').collection('upazillaDonations');
+        const tribalMerchCollection = client.db('thegivingtree').collection('tribalMerch');
 
         //Getting all voluteers info
         app.get('/volunteers', async (req, res) => {
@@ -314,6 +315,64 @@ async function run() {
 
 
         // Upazilla Data Testing End
+
+
+        // Tribal Merch
+
+        // Get all tribal merchs
+        app.get('/merchs', async (req, res) => {
+            const merchs = await tribalMerchCollection.find().toArray();
+            res.send(merchs);
+        })
+
+        // Adding new merchs
+        app.post('/merchs', async (req, res) => {
+            const merch = req.body;
+            const result = await tribalMerchCollection.insertOne(merch);
+            res.send(result);
+        })
+
+        // Delete single tribal merch based on id
+        app.delete('/merchs/:_id', async (req, res) => {
+            const _id = req.params._id;
+            const filter = { _id: ObjectId(_id) };
+            const result = await tribalMerchCollection.deleteOne(filter);
+            res.send(result);
+        })
+
+        // Getting handmade merchs
+        app.get('/handmademerch', async (req, res) => {
+            const collection = 'Handmade'
+            const query = { collection: collection };
+            const result = await tribalMerchCollection.find(query).toArray();
+            res.send(result)
+        });
+
+        // Getting shirt merchs
+        app.get('/shirtmerch', async (req, res) => {
+            const collection = 'Shirt'
+            const query = { collection: collection };
+            const result = await tribalMerchCollection.find(query).toArray();
+            res.send(result)
+        });
+
+        // Getting pant merchs
+        app.get('/pantmerch', async (req, res) => {
+            const collection = 'Pant'
+            const query = { collection: collection };
+            const result = await tribalMerchCollection.find(query).toArray();
+            res.send(result)
+        });
+
+        // Getting single tribal merch description
+        app.get('/tribalmerchdescription/:_id', async (req, res) => {
+            const _id = req.params._id
+            const query = { _id: ObjectId(_id) }
+            const result = await tribalMerchCollection.find(query).toArray();
+            res.send(result)
+        });
+
+        // Tribal Merch End
 
 
         // Payment Intent
