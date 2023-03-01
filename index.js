@@ -42,6 +42,7 @@ async function run() {
         const upazillaCollection = client.db('thegivingtree').collection('upazillas');
         const upazillaDonationCollection = client.db('thegivingtree').collection('upazillaDonations');
         const tribalMerchCollection = client.db('thegivingtree').collection('tribalMerch');
+        const ordersCollection = client.db('thegivingtree').collection('orders');
 
         //Getting all voluteers info
         app.get('/volunteers', async (req, res) => {
@@ -371,6 +372,19 @@ async function run() {
             const result = await tribalMerchCollection.find(query).toArray();
             res.send(result)
         });
+
+        // Confirming Order
+        app.post('/order', async (req, res) => {
+            const payment = req.body;
+            const result = await ordersCollection.insertOne(payment);
+            res.send(result);
+        })
+
+        // Get all order info
+        app.get('/order', async (req, res) => {
+            const orders = await ordersCollection.find().toArray();
+            res.send(orders);
+        })
 
         // Tribal Merch End
 
