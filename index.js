@@ -199,7 +199,7 @@ async function run() {
             res.send(users);
         })
 
-        // Getting individually of individual users by email
+        // Getting individual data of individual users by email
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email
             const query = { email: email };
